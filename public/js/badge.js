@@ -1,13 +1,32 @@
-const badgeHTML = document.getElementById('badge')
+const badgeHTML = document.getElementById('badge');
+let cartId = null;
 
-function printBadge(){
-    const products = localStorage.getItem('products')
-    const productsParse = JSON.parse(products);
-
-    const totalQuantity = productsParse.reduce((prev, current) => {
-        prev += current.quantity;
-        return prev;
-    }, 0)
-    badgeHTML.innerHTML = totalQuantity;
+// Para obtener el ID del carrito, podría ser de un usuario logueado o de un carrito anónimo
+async function getCartId() {
+    if (!cartId) {
+        try {
+            const response = await axios.get('http://localhost:3000/api/cart'); // Ajusta la ruta según tu backend
+            cartId = response.data.id;
+        } catch (error) {
+            console.error('Error fetching cart ID:', error);
+        }
+    }
+    return cartId;
 }
-printBadge()
+
+// Para mostrar la cantidad total de productos en el carrito
+async function printBadge() {
+    try {
+        const cartId = await getCartId();
+        const response = await axios.get(`http://localhost:3000/api/cart/${cartId}/items`);
+        const totalQuantity = response.data.reduce((prev, current) => {
+            prev += current.quantity;
+            return prev;
+        }, 0);
+        badgeHTML.innerHTML = totalQuantity;
+    } catch (error) {
+        console.error('Error fetching cart items:', error);
+    }
+}
+
+printBadge();

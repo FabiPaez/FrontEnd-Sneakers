@@ -138,9 +138,9 @@ select {
 }
 
 #subscribe-container {
-    display: flex; /* Utiliza flexbox para alinear elementos en línea */
-    align-items: center; /* Centra verticalmente los elementos en el contenedor */
-    margin-bottom: 15px; /* Ajusta el margen inferior según sea necesario */
+    display: flex; 
+    align-items: center;
+    margin-bottom: 15px; 
 }
 
 /* Estilos para el label de suscripción */
@@ -207,28 +207,28 @@ footer img {
     }
 
     form {
-        width: 100%; /* Ajustar para ocupar todo el ancho del contenedor */
+        width: 100%; 
         max-width: 600px; /* Ancho máximo para que no sea demasiado grande en tablets */
         border: 1px solid #c8d6fb;
         border-radius: 10px;
         text-align: left;
         padding: 10px;
-        margin: 20px auto; /* Centrar el formulario */
+        margin: 20px auto; 
     }
 
     textarea,
     input[type="text"],
     input[type="email"],
     input[type="tel"] {
-        width: 100%; /* Ocupa todo el ancho disponible */
+        width: 100%; 
     }
 
     select {
-        width: 100%; /* Ocupa todo el ancho disponible */
+        width: 100%; 
     }
 
     button[type="submit"] {
-        width: 100%; /* Ocupa todo el ancho disponible */
+        width: 100%; 
     }
 
     header {
@@ -237,8 +237,8 @@ footer img {
 
     footer {
         flex-wrap: wrap;
-        height: auto; /* Altura automática para permitir múltiples líneas */
-        padding: 5px 2%; /* Ajustado el padding para evitar que el contenido se desborde en dispositivos pequeños */
+        height: auto; 
+        padding: 5px 2%;
     }
 }
 
@@ -250,14 +250,14 @@ footer img {
     }
 
     form {
-        width: 100%; /* Ajustar para ocupar todo el ancho del contenedor */
-        max-width: 400px; /* Ancho máximo para que no sea demasiado grande en celulares */
+        width: 100%;
+        max-width: 400px; 
         border: 1px solid #c8d6fb;
         border-radius: 10px;
         text-align: left;
         padding: 10px;
-        margin: 5px auto; /* Centrar el formulario */
-        padding-top: 60px; /* Espacio suficiente para evitar superposición con el navbar */
+        margin: 5px auto; 
+        padding-top: 60px;
     }
 
     textarea,
@@ -265,16 +265,16 @@ footer img {
     input[type="email"],
     input[type="tel"],
     select {
-        width: 100%; /* Ocupa todo el ancho disponible */
+        width: 100%; 
     }
 
     button[type="submit"] {
-        width: 100%; /* Ocupa todo el ancho disponible */
+        width: 100%; 
     }
 
     form img {
-        max-width: 100%; /* Asegura que la imagen no se desborde */
-        height: auto; /* Mantener la proporción de la imagen */
+        max-width: 100%; 
+        height: auto; 
     }
 
     header {

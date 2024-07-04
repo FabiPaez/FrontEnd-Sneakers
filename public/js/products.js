@@ -1,147 +1,74 @@
-const products = [
-    {
-        id: 1,
-        image: 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1536,h_1536/global/393496/01/sv01/fnd/ARG/fmt/png',
-        name: 'zapatilla',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-        price: 100.20,
-    },
-    {
-        id: 2,
-        image: 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1536,h_1536/global/390028/01/sv01/fnd/ARG/fmt/png',
-        name: 'zapatilla',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-        price: 100.20,
-    },
-    {
-        id: 3,
-        image: 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1536,h_1536/global/394170/06/sv01/fnd/ARG/fmt/png',
-        name: 'zapatilla',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-        price: 100.20,
-    },
-    {
-        id: 4,
-        image: 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1536,h_1536/global/389615/05/sv01/fnd/ARG/fmt/png',
-        name: 'zapatilla',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-        price: 100.20,
-    },
-    {
-        id: 5,
-        image: 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1536,h_1536/global/376855/12/sv01/fnd/ARG/fmt/png',
-        name: 'zapatilla',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-        price: 100.20,
-    },
-    {
-        id: 6,
-        image: 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1536,h_1536/global/108001/01/sv01/fnd/ARG/fmt/png',
-        name: 'zapatilla',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-        price: 100.20,
-    },
-];
-//Para que aparezcan las alertas//
-toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
-    "positionClass": "toast-bottom-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  };
+document.addEventListener('DOMContentLoaded', async () => {
 
-const productsHTML = document.getElementById('products')
-// testID.innerHTML += `<article class="producto">
-//                 <img src=${products.image} alt="Zapatilla mujer">
-//                 <h2>${products.name}</h2>
-//                 <p>${products.description} ${products.price}</p>
-//                 <a href="#">Ver más</a>
-//             </article>`
+    const productContainer = document.getElementById('products');
 
-//icon arriba del cart//
-
-const badgeHTML = document.getElementById('badge')
-
-function printBadge(){
-    const products = localStorage.getItem('products')
-    const productsParse = JSON.parse(products);
-
-    const totalQuantity = productsParse.reduce((prev, current) => {
-        prev += current.quantity;
-        return prev;
-    }, 0)
-    badgeHTML.innerHTML = totalQuantity;
-}
-
-function agregarCarrito(id){
-    const product = products.find((product)=> product.id == id);
-    const productsStorage = localStorage.getItem('products');
-
-    if (productsStorage == null) {
-        console.log('if')
-        const cart = [ {
-            id: product.id,
-            image: product.image,
-            price: product.price,
-            quantity: 1,
-            subTotal: product.price,
-        } ];
-        localStorage.setItem('products', JSON.stringify(cart));
-    } else {
-        console.log('else')
-        const productsParse = JSON.parse(productsStorage);
-        const productIndex = productsParse.findIndex((productParse) => productParse.id == id)
-        if(productIndex == -1) {
-            const cart = [...productsParse, {
-                id: product.id,
-                image: product.image,
-                price: product.price,
-                quantity: 1,
-                subTotal: product.price,
-            } ]
-            localStorage.setItem('products', JSON.stringify(cart) );
-
-        } else {
-            const productMap = productsParse.map((productParse) => {
-                if(productParse.id == id) {
-                    return {
-                        id: productParse.id,
-                        image: productParse.image,
-                        price: productParse.price,
-                        quantity: productParse.quantity + 1,
-                        subTotal: +(productParse.subTotal + productParse.price).toFixed(2)
-                    }
-                }
-    
-                return productParse;
-            })
-            localStorage.setItem('products', JSON.stringify(productMap));
+    // Obtener o crear un carrito
+    async function getOrCreateCart() {
+        try {
+            const userId = null; // Aquí deberías obtener el userId del usuario si está logueado
+            const response = await axios.get(`http://localhost:3000/api/cart?userId=${userId}`);
+            const cartId = response.data.id;
+            console.log(response);
+            localStorage.setItem('cartId', cartId); // Guardar cartId en localStorage
+            return cartId;
+        } catch (error) {
+            console.error('Error creating or fetching cart:', error);
         }
-
     }
-    toastr.success("Tu producto fue añadido al carrito correctamente", "Producto Agregado");
-    printBadge();
-}
-products.forEach(({id, image, name, description, price})=> {
-    productsHTML.innerHTML += `<article class="producto">
-                 <img src=${image} alt="Zapatilla mujer">
-                <h2>${name}</h2>
-                <p>${description}</p>
-                <p>${price}</p>
-                <a href="#">Ver más</a>
-                <button onclick="agregarCarrito(${id})" class="btn">Agregar</button>
-                </article>`
-})
 
-printBadge()
+    const cartId = await getOrCreateCart();
+
+    // Función para obtener productos desde la base de datos
+    async function getProducts() {
+        try {
+            const response = await axios.get('http://localhost:3000/api/products');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            return [];
+        }
+    }
+
+    // Función para mostrar productos en la página
+    function displayProducts(products) {
+        productContainer.innerHTML = '';
+        products.forEach(({ id, image, name, description, price }) => {
+            const productElement = document.createElement('article');
+            productElement.classList.add('producto');
+
+            productElement.innerHTML = `
+            <img src="${image}" alt="${name}">
+            <h2>${name}</h2>
+            <p>${description}</p>
+            <p>$${price.toFixed(2)}</p>
+            <a href="#">Ver más</a>
+            <button onclick="agregarCarrito(${id})" class="btn">Agregar</button>
+        `;
+
+            productContainer.appendChild(productElement);
+        });
+    }    
+
+    // Función para agregar producto al carrito
+    async function agregarCarrito(productId) {
+        try {
+            if (!cartId) {
+                await getOrCreateCart();
+            }
+            const response = await axios.post(`http://localhost:3000/api/cart/${cartId}/items`, {
+                productId: productId,
+                quantity: 1
+            });
+            console.log('Product added to cart:', response.data);
+        } catch (error) {
+            console.error('Error adding product to cart:', error);
+        }
+    }
+
+    // Llamar a getOrCreateCart() al cargar la página o al iniciar sesión
+    getOrCreateCart();
+    window.agregarCarrito = agregarCarrito;
+
+    // Obtener y mostrar los productos cuando se carga la página
+    getProducts().then(displayProducts);
+});

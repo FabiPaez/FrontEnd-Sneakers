@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function getProducts() {
         try {
             const response = await axios.get('https://backend-sneakers-5feb28529d4a.herokuapp.com/api/products');
+            console.log('Products fetched:', response.data); // Agrega este log para verificar la respuesta
             return response.data;
         } catch (error) {
             console.error('Error fetching products:', error);

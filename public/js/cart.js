@@ -2,7 +2,7 @@
 async function getOrCreateCart() {
     try {
         const userId = null; // obtener el userId del usuario si está logueado
-        const response = await axios.get(`http://localhost:3000/api/cart?userId=${userId}`);
+        const response = await axios.get(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart?userId=${userId}`);
         const cartId = response.data.id;
         console.log(response);
         localStorage.setItem('cartId', cartId); // Guardar cartId en localStorage
@@ -16,7 +16,7 @@ async function getOrCreateCart() {
 async function increment(id) {
     try {
         const cartId = await getOrCreateCart();
-        await axios.put(`http://localhost:3000/api/cart/items/${id}/increment`);
+        await axios.put(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/items/${id}/increment`);
         await fetchCartItems();
     } catch (error) {
         console.error('Error incrementing product quantity:', error);
@@ -27,7 +27,7 @@ async function increment(id) {
 async function decrease(id) {
     try {
         const cartId = await getOrCreateCart();
-        await axios.put(`http://localhost:3000/api/cart/items/${id}/decrease`);
+        await axios.put(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/items/${id}/decrease`);
         await fetchCartItems();
     } catch (error) {
         console.error('Error decreasing product quantity:', error);
@@ -38,7 +38,7 @@ async function decrease(id) {
 async function deleteProduct(id) {
     try {
         const cartId = await getOrCreateCart();
-        await axios.delete(`http://localhost:3000/api/cart/${cartId}/items/${id}`);
+        await axios.delete(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/${cartId}/items/${id}`);
         await fetchCartItems();
     } catch (error) {
         console.error('Error deleting product:', error);
@@ -49,7 +49,7 @@ async function deleteProduct(id) {
 async function fetchCartItems() {
     try {
         const cartId = await getOrCreateCart();
-        const response = await axios.get(`http://localhost:3000/api/cart/${cartId}/items`);
+        const response = await axios.get(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/${cartId}/items`);
         print(response.data);
     } catch (error) {
         console.error('Error fetching cart items:', error);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     vaciarCart.addEventListener('click', async () => {
         try {
             const cartId = await getOrCreateCart();
-            await axios.delete(`http://localhost:3000/api/cart/${cartId}/items`);
+            await axios.delete(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/${cartId}/items`);
             print([]);
         } catch (error) {
             console.error('Error emptying cart:', error);

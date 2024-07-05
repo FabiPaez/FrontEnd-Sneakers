@@ -5,7 +5,7 @@ let cartId = null;
 async function getCartId() {
     if (!cartId) {
         try {
-            const response = await axios.get('http://localhost:3000/api/cart'); // Ajusta la ruta según tu backend
+            const response = await axios.get('https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart'); // Ajusta la ruta según tu backend
             cartId = response.data.id;
         } catch (error) {
             console.error('Error fetching cart ID:', error);
@@ -18,7 +18,7 @@ async function getCartId() {
 async function printBadge() {
     try {
         const cartId = await getCartId();
-        const response = await axios.get(`http://localhost:3000/api/cart/${cartId}/items`);
+        const response = await axios.get(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/${cartId}/items`);
         const totalQuantity = response.data.reduce((prev, current) => {
             prev += current.quantity;
             return prev;

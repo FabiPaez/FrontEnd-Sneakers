@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
     const productContainer = document.getElementById('products');
 
     // Obtener o crear un carrito
     async function getOrCreateCart() {
         try {
             const userId = null; // Aquí deberías obtener el userId del usuario si está logueado
-            const response = await axios.get(`http://localhost:3000/api/cart?userId=${userId}`);
+            const response = await axios.get(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart?userId=${userId}`);
             const cartId = response.data.id;
             console.log(response);
             localStorage.setItem('cartId', cartId); // Guardar cartId en localStorage
@@ -21,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Función para obtener productos desde la base de datos
     async function getProducts() {
         try {
-            const response = await axios.get('http://localhost:3000/api/products');
+            const response = await axios.get('https://backend-sneakers-5feb28529d4a.herokuapp.com/api/products');
             return response.data;
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!cartId) {
                 await getOrCreateCart();
             }
-            const response = await axios.post(`http://localhost:3000/api/cart/${cartId}/items`, {
+            const response = await axios.post(`https://backend-sneakers-5feb28529d4a.herokuapp.com/api/cart/${cartId}/items`, {
                 productId: productId,
                 quantity: 1
             });
